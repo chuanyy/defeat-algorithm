@@ -9,22 +9,25 @@ import java.util.Arrays;
  * 初始已排序区间只有一个元素，就是数组的第一个元素。
  * 插入算法的核心思想是取未排序区间中的元素，在已排序区间中找到合适的插入位置将其插入，并保证已排序区间数据一直有序。
  * 重复这个过程，直到未排序区间中元素为空，算法结束。
+ * @author lichuan
  */
-public class InsertSortProblem {
-    public static void insertSort(int[] nums) {
-        if(null == nums || nums.length == 0) {
-            return;
+public class InsertSort {
+    public static int[] insertSort(int[] arr) {
+        if(null == arr || arr.length < 2) {
+            return null;
         }
-        int length = nums.length;
+        int length = arr.length;
         for (int i = 1, j; i < length; i++) {
             //当前需要插入的数
-            int num = nums[i];
+            int num = arr[i];
             //大于当前值的数后移，找到插入位置
-            for (j = i - 1; j >= 0 && nums[j] > num; j--) {
-                nums[j + 1] = nums[j];
+            for (j = i - 1; j >= 0 && arr[j] > num; j--) {
+                arr[j + 1] = arr[j];
             }
-            nums[j + 1] = num;
+            arr[j + 1] = num;
         }
+
+        return arr;
     }
 
     public static void main(String[] args) {

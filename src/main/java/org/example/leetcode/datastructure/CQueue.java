@@ -11,7 +11,7 @@ import java.util.Stack;
  */
 public class CQueue {
     Stack<Integer> stack1;
-    Stack<Integer> stack2
+    Stack<Integer> stack2;
     public CQueue() {
         stack1 = new Stack<>();
         stack2 = new Stack<>();
