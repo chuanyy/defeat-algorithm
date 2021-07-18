@@ -3,7 +3,7 @@ package org.example.leetcode.dp.stock;
 /**
  * 动态规划解决股票类型问题
  *
- * https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/solution/zui-jia-mai-mai-gu-piao-shi-ji-han-leng-dong-qi-4/
+ * 参考 https://leetcode-cn.com/circle/article/qiAgHn/
  */
 public class StockProblem {
 
@@ -17,7 +17,7 @@ public class StockProblem {
      * 参考：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/solution/bao-li-mei-ju-dong-tai-gui-hua-chai-fen-si-xiang-b/
      */
     public int maxProfit121(int[] prices) {
-        if (null == prices || prices.length == 0) {
+        if (null == prices || prices.length < 2) {
             return 0;
         }
         int length = prices.length;
@@ -40,7 +40,7 @@ public class StockProblem {
      * 参考：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/solution/tan-xin-suan-fa-by-liweiwei1419-2/
      */
     public int maxProfit122(int[] prices) {
-        if (null == prices || prices.length == 0) {
+        if (null == prices || prices.length < 2) {
             return 0;
         }
         int length = prices.length;
@@ -62,8 +62,30 @@ public class StockProblem {
      * https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/
      * 参考：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/solution/mai-mai-gu-piao-de-zui-jia-shi-ji-iii-by-wrnt/
      */
+    public int maxProfit123LiJie(int[] prices) {
+        if (null == prices || prices.length < 2) {
+            return 0;
+        }
+        int length = prices.length;
+        //dp[i][j][0]表示第i天结束时，最多进行k次操作后，手里不持股的最大收益
+        //dp[i][j][1]表示第i天结束时，最多进行k次操作后，手里持1份股的最大收益
+        int[][][] dp = new int[length][3][2];
+        dp[0][1][0] = 0;
+        dp[0][1][1] = -prices[0];
+        dp[0][2][0] = 0;
+        dp[0][2][1] = -prices[0];
+        for (int i = 1; i < length; i++) {
+            dp[i][1][0] = Math.max(dp[i - 1][1][0], dp[i - 1][1][1] + prices[i]);
+            dp[i][1][1] = Math.max(dp[i - 1][1][1], -prices[i]);
+            dp[i][2][0] = Math.max(dp[i - 1][2][0], dp[i - 1][2][1] + prices[i]);
+            dp[i][2][1] = Math.max(dp[i - 1][2][1], dp[i - 1][1][0] - prices[i]);
+        }
+
+        return dp[length - 1][2][0];
+    }
+
     public int maxProfit123(int[] prices) {
-        if (null == prices || prices.length == 0) {
+        if (null == prices || prices.length < 2) {
             return 0;
         }
         int length = prices.length;
@@ -82,28 +104,75 @@ public class StockProblem {
     }
 
     /**
+     *
+     * 188. 买卖股票的最佳时机 IV https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iv/
+     */
+    public int maxProfit188(int k, int[] prices) {
+        if (null == prices || prices.length < 2) {
+            return 0;
+        }
+        int length = prices.length;
+        if (k > length / 2) {
+            return maxProfit122(prices);
+        }
+        int[][][] dp = new int[length][k + 1][2];
+        for (int i = 1; i <= k; i++) {
+            dp[0][i][0] = 0;
+            dp[0][i][1] = -prices[0];
+        }
+        for (int i = 1; i < length; i++) {
+            for (int j = 1; j <=k; j++) {
+                dp[i][j][0] = Math.max(dp[i - 1][j][0], dp[i - 1][j][1] + prices[i]);
+                dp[i][j][1] = Math.max(dp[i - 1][j][1], dp[i - 1][j - 1][0] - prices[i]);
+            }
+        }
+
+        return dp[length - 1][k][0];
+    }
+
+    /**
      * 309. 最佳买卖股票时机含冷冻期
      *
      * https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
      * 参考：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/solution/zui-jia-mai-mai-gu-piao-shi-ji-han-leng-dong-qi-4/
      */
+
+    public int maxProfit309LiJie(int[] prices) {
+        if (prices == null || prices.length < 2) {
+            return 0;
+        }
+        int length = prices.length;
+        int[][] dp = new int[length][2];
+        dp[0][0] = 0;
+        dp[0][1] = -prices[0];
+        for (int i = 1; i < length; i++) {
+            dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
+            //在有「冷却时间」的情况下，如果在第 i - 1 天卖出了股票，就不能在第 i 天买入股票。
+            // 因此，如果要在第 i 天买入股票，第二个状态转移方程中就不能使用 T[i - 1][k][0]，
+            // 而应该使用 T[i - 2][k][0](因为第i天要买入股票，所以第i-1天不能持有股票;又因为右冷却期，所以第i-1天不能卖出股票。
+            // 因此只能是第i-2天不持股：卖出或不持股)
+            //
+            dp[i][1] = Math.max(dp[i - 1][1], (i >= 2 ? dp[i - 2][0] : 0) - prices[i]);
+        }
+        return dp[length - 1][0];
+    }
+
     public int maxProfit309(int[] prices) {
         if (null == prices || prices.length == 0) {
             return 0;
         }
 
         //此处注意时从第0天开始的
-        int dp0 = -prices[0];
-        int dp1 = 0;
-        int dp2 = 0;
-        for (int i = 1; i < prices.length; i++) {
-            dp0 = Math.max(dp0, dp2 - prices[i]);
-            dp1 = dp0 + prices[i];
-            dp2 = Math.max(dp1, dp2);
+        int prevProfit0 = 0, profit0 = 0, profit1 = -prices[0];
+        int length = prices.length;
+        for (int i = 1; i < length; i++) {
+            int nextProfit0 = Math.max(profit0, profit1 + prices[i]);
+            int nextProfit1 = Math.max(profit1, prevProfit0 - prices[i]);
+            prevProfit0 = profit0;
+            profit0 = nextProfit0;
+            profit1 = nextProfit1;
         }
-
-        //如果在最后一天（第n-1天）结束之后，手上仍持有股票，那么显然时没有意义的
-        return Math.max(dp1, dp2);
+        return profit0;
     }
 
 

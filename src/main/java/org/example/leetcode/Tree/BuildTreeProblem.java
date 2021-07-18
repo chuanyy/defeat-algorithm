@@ -7,6 +7,7 @@ import java.util.Map;
  *  105. 从前序与中序遍历序列构造二叉树
  *
  *  https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
+ * @author lichuan
  */
 public class BuildTreeProblem {
 
@@ -20,10 +21,10 @@ public class BuildTreeProblem {
             map.put(inorder[i], i);
         }
 
-        return buildTreeCore(preorder, inorder, 0, nodeNum - 1, 0, nodeNum - 1);
+        return buildTreeCore(preorder, 0, nodeNum - 1, 0);
     }
 
-    private TreeNode buildTreeCore(int[] preorder, int[] inorder, int preLeft, int preRight, int inLeft, int inRight) {
+    private TreeNode buildTreeCore(int[] preorder, int preLeft, int preRight, int inLeft) {
         if (preLeft > preRight) {
             return null;
         }
@@ -35,8 +36,8 @@ public class BuildTreeProblem {
         int leftNum = inRootIndex - inLeft;
 
         //递归构造左子树和右子树
-        root.left = buildTreeCore(preorder, inorder, preLeft + 1, preLeft + leftNum, inLeft, inRootIndex - 1);
-        root.right = buildTreeCore(preorder, inorder, preLeft + leftNum + 1, preRight, inRootIndex + 1, inRight);
+        root.left = buildTreeCore(preorder, preLeft + 1, preLeft + leftNum, inLeft);
+        root.right = buildTreeCore(preorder, preLeft + leftNum + 1, preRight, inRootIndex + 1);
 
         return root;
     }

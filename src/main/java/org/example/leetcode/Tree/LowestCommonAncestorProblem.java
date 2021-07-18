@@ -32,6 +32,31 @@ public class LowestCommonAncestorProblem {
         return root;
     }
 
+
+    /**
+     * 牛客网
+     */
+    public int lowestCommonAncestor (TreeNode root, int o1, int o2) {
+        TreeNode node = CommonAncestor(root, o1, o2);
+        return null == node ? -1 : node.val;
+    }
+
+    public TreeNode CommonAncestor (TreeNode root, int o1, int o2) {
+        //递归终止条件
+        if (null == root || o1 == root.val || o2 == root.val) {
+            return root;
+        }
+        TreeNode left = CommonAncestor(root.left, o1, o2);
+        TreeNode right = CommonAncestor(root.right, o1, o2);
+        if (left == null) {  // 都在右侧
+            return right;
+        }
+        if (right == null) { // 都在左侧
+            return left;
+        }
+        return root; // 在左右两侧
+    }
+
     //**************************方法一，需要递归两次******************************************************
     //第一次递归，判断p、节点是否存在于树中
     //第二次递归，找出最近公告祖先

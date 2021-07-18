@@ -5,7 +5,7 @@ import org.example.leetcode.linkedList.ListNode;
 import java.util.LinkedList;
 import java.util.List;
 
-public class lastRemainingProblerm {
+public class LastRemainingProblem {
 
     //**********************************方法一：数学+迭代******************************************************************
 

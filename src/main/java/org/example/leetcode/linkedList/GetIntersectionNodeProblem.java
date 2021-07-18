@@ -14,7 +14,7 @@ public class GetIntersectionNodeProblem {
             return null;
         }
         //题解：设链表A的长度为a+c，链表B的长度为b+c，a为链表A不公共部分，b为链表B不公共部分，c为链表A、B的公共部分
-        //将两个链表连起来，A->B和B->A，长度：a+c+b=b+c+a，若链表AB相交，则a+c+b与b+c+a就会抵消，它们就会在c处相遇；若不相交，则c为null，则a+b=b+a，它们各自移动到尾部循环结束，即返回null
+        //将两个链表连起来，A->B和B->A，长度：a+c+b+c=b+c+a+c，若链表AB相交，则a+c+b与b+c+a就会抵消，它们就会在c处相遇；若不相交，则c为null，则a+b=b+a，它们各自移动到尾部循环结束，即返回null
         ListNode pA = headA, pB = headB;
         while (pA != pB) {
             //当pA或pB为空时，它们开始指向另一链表的头部，每次判断pA或pB是否为空进行赋值的好处是当链表AB没有公共部分时pA和pB同时为空，这样避免了死循环
