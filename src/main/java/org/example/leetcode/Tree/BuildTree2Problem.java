@@ -27,7 +27,9 @@ public class BuildTree2Problem {
     }
 
     public TreeNode buildTree(int is, int ie, int ps, int pe) {
-        if(ie < is || pe < ps) return null;
+        if(ie < is || pe < ps) {
+            return null;
+        }
 
         //后续遍历的最后一个节点即为根节点
         int root = post[pe];

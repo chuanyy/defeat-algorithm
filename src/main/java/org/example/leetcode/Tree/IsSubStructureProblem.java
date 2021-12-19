@@ -28,4 +28,22 @@ public class IsSubStructureProblem {
 
         return recur(nodeA.left, nodeB.left) && recur(nodeA.right, nodeB.right);
     }
+
+
+    /**
+     * NC98 判断t1树中是否有与t2树拓扑结构完全相同的子树 使用一下recur函数
+     * https://www.nowcoder.com/practice/4eaccec5ee8f4fe8a4309463b807a542?tpId=190&&tqId=35222&rp=1&ru=/ta/job-code-high-rd&qru=/ta/job-code-high-rd/question-ranking
+     */
+    private boolean recur2(TreeNode nodeA, TreeNode nodeB) {
+        //B树遍历完了，说明B是A的子结构
+        if (null == nodeA && null == nodeB) {
+            return true;
+        }
+
+        if (null == nodeA || null == nodeB || nodeA.val != nodeB.val) {
+            return false;
+        }
+
+        return recur(nodeA.left, nodeB.left) && recur(nodeA.right, nodeB.right);
+    }
 }

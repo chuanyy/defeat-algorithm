@@ -5,6 +5,11 @@ import org.example.leetcode.linkedList.ListNode;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * 环形链表的约瑟夫环
+ * https://www.nowcoder.com/practice/41c399fdb6004b31a6cbb047c641ed8a?tpId=190&&tqId=36013&rp=1&ru=/ta/job-code-high-rd&qru=/ta/job-code-high-rd/question-ranking
+ *
+ */
 public class LastRemainingProblem {
 
     //**********************************方法一：数学+迭代******************************************************************
@@ -44,4 +49,37 @@ public class LastRemainingProblem {
         }
         return list.get(0);
     }
+
+    //**********************************方法三：链表模拟******************************************************************
+
+    public int ysf(int n, int m) {
+        if (n < 1 || m < 1) {
+            return -1;
+        }
+
+        ListNode head = new ListNode(1);
+        ListNode tail = head;
+        for (int i = 2; i <= n; i++) {
+            tail.next = new ListNode(i);
+            tail = tail.next;
+        }
+
+        //链接成环
+        tail.next = head;
+        ListNode index = head;
+        ListNode pre = tail;
+        int k = 0;
+        while (null != index.next && index.next != index) {
+          k++;
+          ListNode next = index.next;
+          if (m == k) {
+              pre.next = pre.next.next;
+              k =0;
+          }
+          pre = index;
+          index = next;
+        }
+        return index.val;
+    }
+
 }

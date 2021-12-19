@@ -40,11 +40,13 @@ public class IsSymmetricProblem {
             l = queue.poll();
             r = queue.poll();
 
-            if (null == l && null == r)
+            if (null == l && null == r) {
                 continue;
+            }
 
-            if ((null == l || null == r) || (l.val != r.val))
+            if ((null == l || null == r) || (l.val != r.val)) {
                 return false;
+            }
 
             queue.offer(l.left);
             queue.offer(r.right);
